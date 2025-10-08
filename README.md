@@ -47,7 +47,7 @@ Per caricare il programma sull'Alphabot basta eseguirlo con python nella conness
 pi@AB17:~ $ python3 forward.py
 ```
 ## WinSCP
-Uno strumento che può essere utile allo sviluppo di codice per Alèphabot è **WinSCP** che consente di spostare dei file dal PC locale alla SSD dell'Alphabot. Questo consente di utilizzare un editor di testo [VSC, Sublime] al posto di nano.
+Uno strumento che può essere utile allo sviluppo di codice per Alphabot è **WinSCP** che consente di spostare dei file dal PC locale alla SSD dell'Alphabot. Questo consente di utilizzare un editor di testo [VSC, Sublime] al posto di nano.
 
 ### Installazione di WinSCP
 ## Linux
