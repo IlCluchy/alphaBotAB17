@@ -38,7 +38,7 @@ pi@AB17:~ $
 Stabilita la connessione è possibile visionere la struttare della directory
 
 ## Primi programmi
-Per iniziare a far muovere un Alphabot si può utilizzare la libreria [Alphabot.py](./libreries/Alphabot.py).
+Per iniziare a far muovere un Alphabot si può utilizzare la libreria [Alphabot.py](Alphabot.py).
 
 Ecco un esempio di codice Python che faccia andare avanti l'Alphabot [forward.py](forward.py).
 
