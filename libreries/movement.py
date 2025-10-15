@@ -64,12 +64,39 @@ def left(robot, degree):
     time.sleep(rotation_time)
     robot.stop()
 
-def main():
-    robot = AlphaBot()
-    #right(robot, 90)
-    #square(robot, 'right', 40, 0.5, 0.2)
-    #triangle(robot, 'right', 40, 0.5, 0.2)
-    circle(robot, 'right', 40, 3)
+# ---------- Funzioni sensori IR ----------
 
-if __name__ == '__main__':
-    main()
+
+def read_sensors(robot):
+    """0 = ostacolo, 1 = libero"""
+    left = robot.getLeftIrSensor()
+    right = robot.getRightIrSensor()
+    return left, right
+
+def avoid_obstacle(robot):
+
+        left, right = read_sensors(robot)
+        print(f"Sensore sinistro: {left}, destro: {right}")
+
+        if left == 1 and right == 1:
+            # Nessun ostacolo, avanti
+            robot.forward()
+
+        elif left == 0 and right == 1:
+            # Ostacolo a sinistra, gira a destra
+            robot.rightOnSelf()
+            time.sleep(0.2)
+            robot.forward()
+
+        elif left == 1 and right == 0:
+            # Ostacolo a destra, gira a sinistra
+            robot.leftOnSelf()
+            time.sleep(0.2)
+            robot.forward()
+
+        elif left == 0 and right == 0:
+            # Ostacolo davanti, indietreggia e gira
+            robot.backward()
+            time.sleep(0.3)
+            robot.leftOnSelf()
+            time.sleep(0.4)

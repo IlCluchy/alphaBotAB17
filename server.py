@@ -1,8 +1,23 @@
 import socket
-from libreries.AlphaBot import AlphaBot
+from libreries.AlphaBot2 import AlphaBot
+from libreries import movement
+import threading
 
 IP = "0.0.0.0"
 PORT = 55555
+
+def reax_exit(exit):
+    exit_input = input('Per uscire scrivi exit: ')
+    
+    if(exit_input.lower() == 'exit'):
+        exit = False
+
+def auto_mode(robot):
+    exit = True
+
+    while exit:
+        threading.Thread(target=reax_exit, daemon=True, args=(exit, )).start()
+        movement.avoid_obstacle(robot)
 
 def main():
     robot = AlphaBot()
@@ -37,6 +52,9 @@ def main():
             elif data.lower() == "d":
                 robot.right()
                 conn.send(b"Destra")
+            elif data.lower() == 'auto mode':
+                auto_mode(robot)
+                conn.send(b"auto mode attivata")
             elif data.lower() == "x":
                 robot.stop()
                 conn.send(b"Stop")

@@ -1,7 +1,7 @@
 import socket
 
 IP = "192.168.1.112" 
-PORT = 55555
+PORT = 5555
 
 def main():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -19,7 +19,7 @@ def main():
         while True:
             comando = input("Inserisci comando (w/a/s/d/x/exit): ").lower()
 
-            if comando in ['w', 'a', 's', 'd', 'x', 'exit']:
+            if comando in ['w', 'a', 's', 'd', 'auto mode','x', 'exit']:
                 client_socket.send(comando.encode())
 
                 if comando == "exit":
