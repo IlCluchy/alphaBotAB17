@@ -55,12 +55,15 @@ class AlphaBot(object):
 		GPIO.output(self.IN3,GPIO.LOW)
 		GPIO.output(self.IN4,GPIO.LOW)
 
+
+	#gira su se stesso a sinistra
 	def leftOnSelf(self):
 		GPIO.output(self.IN1,GPIO.LOW)
 		GPIO.output(self.IN2,GPIO.HIGH)
 		GPIO.output(self.IN3,GPIO.LOW)
 		GPIO.output(self.IN4,GPIO.HIGH)
 
+	#gira su se stesso a destra
 	def rightOnSelf(self):
 		GPIO.output(self.IN1,GPIO.HIGH)
 		GPIO.output(self.IN2,GPIO.LOW)
