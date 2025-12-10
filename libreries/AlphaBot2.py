@@ -13,7 +13,7 @@ class AlphaBot:
 
         # Pin sensori IR
         self.IR_L = ir_l
-        self.IR_R = ir_r
+        self.IR_R = ir_r 
 
         # Setup GPIO
         GPIO.setmode(GPIO.BCM)
