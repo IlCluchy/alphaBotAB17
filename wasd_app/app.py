@@ -14,12 +14,16 @@ def index():
         comando = request.form.get("cmd")
         
     if comando == 'w':
+        robot.stop()
         robot.forward()
     elif comando == 'a':
+        robot.stop()
         robot.left()
     elif comando == 'd':
+        robot.stop()
         robot.right()
     elif comando == 's':
+        robot.stop()
         robot.backward()
     elif comando == 'stop':
         robot.stop()
