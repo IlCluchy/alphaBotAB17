@@ -17,7 +17,7 @@ def main():
 
     try:
         while True:
-            comando = input("Inserisci comando (w/a/s/d/x/exit): ").lower()
+            comando = input("Inserisci comando (w/a/s/d/auto mode/x/exit): ").lower()
 
             if comando in ['w', 'a', 's', 'd', 'auto mode','x', 'exit']:
                 client_socket.send(comando.encode())
