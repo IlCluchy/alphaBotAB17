@@ -1,0 +1,78 @@
+/* Reset base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Corpo pagina */
+body {
+    height: 100vh;
+    background: #0f172a; /* blu scuro */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Form centrato */
+form {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(4, 80px);
+    gap: 15px;
+    background: #020617;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+}
+
+/* Pulsanti */
+button {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e5e7eb;
+    background: #1e293b;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Hover */
+button:hover {
+    background: #38bdf8;
+    color: #020617;
+    transform: scale(1.05);
+}
+
+/* Click */
+button:active {
+    transform: scale(0.95);
+}
+
+/* Posizionamento stile joystick */
+button[value="w"] {
+    grid-column: 2;
+}
+
+button[value="a"] {
+    grid-column: 1;
+}
+
+button[value="d"] {
+    grid-column: 3;
+}
+
+button[value="s"] {
+    grid-column: 2;
+}
+
+button[value="stop"] {
+    grid-column: 1 / 4;
+    background: #dc2626;
+}
+
+button[value="stop"]:hover {
+    background: #f87171;
+}
