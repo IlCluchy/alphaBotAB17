@@ -19,7 +19,7 @@ robot = None
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-login_manager.login_message = 'Per favore effettua il login per accedere a questa pagina.'
+#login_manager.login_message = 'Per favore effettua il login per accedere a questa pagina.'
 
 class User(UserMixin):
     def __init__(self, id, username):
@@ -115,9 +115,16 @@ def get_user_by_username(username):
 # -------------------
 # ROUTES
 # -------------------
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
+def index():
+    # Reindirizza alla pagina di login
+    return redirect(url_for('login'))
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    # Se l'utente è già autenticato, reindirizza a command
+    session.clear()
+
+    # Se l'utente è già autenticato, reindirizza ai comandi
     if current_user.is_authenticated:
         return redirect(url_for('command'))
     
@@ -126,17 +133,18 @@ def login():
         password = request.form.get("password")
         remember = request.form.get("remember", False)
 
-        # CORREZIONE: restituisce il risultato di verify_user_data
+        # Verifica credenziali e fa login
         result = verify_user_data(username, password, remember)
         if result:
             return result
     
-    # Mostra la pagina di login (index.html, NON command.html)
+    # Mostra la pagina di login (index.html)
     return render_template("index.html")
 
 @app.route("/command", methods=["GET", "POST"])
 @login_required
 def command():
+    # Pagina dei comandi del robot (command.html)
     if request.method == "POST":
         cmd = request.form.get("cmd")
         handle_command(cmd)
