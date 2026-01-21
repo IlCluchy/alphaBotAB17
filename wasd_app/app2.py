@@ -1,12 +1,10 @@
 import sqlite3
 import hashlib
 import binascii
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request
 from libreries.AlphaBot import AlphaBot
-import os
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  # necessario per sessioni
 
 DB_NAME = "alphaBotDB.db"
 ITERATIONS = 200_000
@@ -66,38 +64,31 @@ def authenticate_user(username, password):
     return False
 
 # -------------------
-# ROUTES
+#       LOGIN
 # -------------------
-@app.route("/login", methods=["GET", "POST"])
+
+@app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
+
         if authenticate_user(username, password):
-            session["username"] = username
-            return redirect(url_for("index"))
+            return render_template("command.html")
         else:
-            flash("Username o password errati")
-    return render_template("login.html")
+            return render_template("index.html", error="Invalid credentials")
 
-@app.route("/logout")
-def logout():
-    session.pop("username", None)
-    return redirect(url_for("login"))
+    return render_template("index.html")
 
-@app.route("/", methods=['GET', 'POST'])
-def index():
-    if "username" not in session:
-        return redirect(url_for("login"))
 
-    if request.method == "POST":
-        command = request.form.get("cmd")
-        handle_command(command)
-
-    return render_template("index.html", username=session["username"])
+@app.route("/command", methods=["POST"])
+def command():
+    cmd = request.form.get("cmd")
+    handle_command(cmd)
+    return render_template("command.html")
 
 # -------------------
-# MAIN
+#       MAIN
 # -------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True, threaded=False, processes=1)
