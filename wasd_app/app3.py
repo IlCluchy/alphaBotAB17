@@ -17,16 +17,15 @@ robot = None
 # FLASK-LOGIN SETUP
 # -------------------
 login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-#login_manager.login_message = 'Per favore effettua il login per accedere a questa pagina.'
+login_manager.init_app(app) #collega il login manager all'app flask
+login_manager.login_view = 'login' #reindirizza uno user non autenticato alla pagina di login
 
-class User(UserMixin):
+class User(UserMixin):   #UserMinxin inizializza le funzioni fondamentali di flask-login
     def __init__(self, id, username):
         self.id = id
         self.username = username
 
-@login_manager.user_loader
+@login_manager.user_loader # user_loader ricarica l'utente dalla sessione
 def load_user(user_id):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
@@ -41,20 +40,19 @@ def load_user(user_id):
 # FLASK-LOGIN FUNCTION
 # ---------------------
 
-def verify_user_data(username, password, remember):
+def verify_user_data(username, password):
     user_data = get_user_by_username(username)
         
     if user_data and verify_password(password, user_data[2]):
         user = User(user_data[0], user_data[1])
-        login_user(user, remember=remember)
-        
+        login_user(user)
+
         session['username'] = user.username
         session['user_id'] = user.id
         session['robot_status'] = 'stopped'
         session['last_command'] = None
 
-        next_page = request.args.get('next')
-        return redirect(next_page) if next_page else redirect(url_for('command'))
+        return redirect('command')
     else:
         flash("Credenziali non valide. Riprova.", "error")
         return None
@@ -135,38 +133,28 @@ def get_movement(command):
 # -------------------
 @app.route("/")
 def index():
-    # Reindirizza alla pagina di login
     return redirect(url_for('login'))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     session.clear()
-
-    # Se l'utente è già autenticato, reindirizza ai comandi
-    if current_user.is_authenticated:
-        return redirect(url_for('command'))
     
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        remember = request.form.get("remember", False)
 
-        # Verifica credenziali e fa login
-        result = verify_user_data(username, password, remember)
+        result = verify_user_data(username, password)
         if result:
             return result
     
-    # Mostra la pagina di login (index.html)
     return render_template("index.html")
 
 @app.route("/command", methods=["GET", "POST"])
 @login_required
 def command():
-    # Pagina dei comandi del robot (command.html)
     if request.method == "POST":
         cmd = request.form.get("cmd")
         handle_command(cmd)
-        # Dopo aver gestito il comando, reindirizza per evitare re-submit del form
         return redirect(url_for('command'))
     
     last_cmd = session.get('last_command', 'Nessun comando ancora')
@@ -177,7 +165,6 @@ def command():
 @app.route("/logout")
 @login_required
 def logout():
-    # Ferma il robot prima del logout
     if robot is not None:
         robot.stop()
     

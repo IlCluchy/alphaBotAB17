@@ -1,78 +1,110 @@
-/* Reset base */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-/* Corpo pagina */
 body {
-    height: 100vh;
-    background: #0f172a; /* blu scuro */
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    font-family: Arial, Helvetica, sans-serif;
+    padding: 20px;
 }
-
-/* Form centrato */
-form {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(4, 80px);
-    gap: 15px;
-    background: #020617;
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+.header {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
-
-/* Pulsanti */
-button {
+.user-info {
     font-size: 18px;
     font-weight: bold;
-    color: #e5e7eb;
-    background: #1e293b;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    color: #333;
 }
-
-/* Hover */
-button:hover {
-    background: #38bdf8;
-    color: #020617;
+.logout-btn {
+    padding: 8px 20px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+.logout-btn:hover {
+    background-color: #c82333;
+}
+.control-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    text-align: center;
+}
+.status-info {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+}
+.status-info p {
+    margin: 5px 0;
+    color: #555;
+}
+.control-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+button[name="cmd"] {
+    width: 100px;
+    height: 100px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+button[name="cmd"]:hover {
+    background-color: #0056b3;
     transform: scale(1.05);
 }
-
-/* Click */
-button:active {
+button[name="cmd"]:active {
     transform: scale(0.95);
 }
-
-/* Posizionamento stile joystick */
+button[value="stop"] {
+    grid-column: 2;
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+button[value="stop"]:hover {
+    background-color: #c82333;
+}
 button[value="w"] {
     grid-column: 2;
 }
-
 button[value="a"] {
     grid-column: 1;
+    grid-row: 2;
 }
-
 button[value="d"] {
     grid-column: 3;
+    grid-row: 2;
 }
-
 button[value="s"] {
     grid-column: 2;
+    grid-row: 2;
 }
-
-button[value="stop"] {
-    grid-column: 1 / 4;
-    background: #dc2626;
-}
-
-button[value="stop"]:hover {
-    background: #f87171;
+h2 {
+    color: #333;
+    margin-bottom: 20px;
 }

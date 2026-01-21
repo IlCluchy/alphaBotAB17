@@ -1,49 +1,10 @@
-<!--<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controllo Robot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
-</head>
-<body>
-    <div class="header">
-        <div class="user-info">
-             Benvenuto, {{ username }}!
-        </div>
-        <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
-    </div>
-
-    <div class="control-container">
-        <h2> Controllo AlphaBot</h2>
-        
-        <div class="status-info">
-            <p><strong>Stato Robot:</strong> {{ robot_status }}</p>
-            <p><strong>Ultimo Comando:</strong> {{ last_command }}</p>
-        </div>
-
-        <form method="POST">
-            <div class="control-grid">
-                <button type="submit" name="cmd" value="w">Avanti</button>
-                <button type="submit" name="cmd" value="a">Sinistra</button>
-                <button type="submit" name="cmd" value="s">Indietro</button>
-                <button type="submit" name="cmd" value="d">Destra</button>
-            </div>
-            <button type="submit" name="cmd" value="stop" style="width: 220px; height: 60px; margin-top: 10px;">STOP</button>
-        </form>
-    </div>
-</body>
-</html>-->
-
-
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controllo Robot</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="header">
