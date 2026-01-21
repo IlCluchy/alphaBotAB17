@@ -83,6 +83,8 @@ def handle_command(command):
         r.backward()
     elif command == 'stop':
         r.stop()
+    elif command == 'circle':
+        mv = get_movement(command)
 
     session['last_command'] = command
     session['robot_status'] = 'moving' if command != 'stop' else 'stopped'
@@ -106,6 +108,14 @@ def get_user_by_username(username):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute("SELECT id, username, password_hash FROM users WHERE username = ?", (username,))
+    row = cursor.fetchone()
+    conn.close()
+    return row
+
+def get_movement(command):
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("SELECT function_library FROM movements WHERE descrizione = ?", (command,))
     row = cursor.fetchone()
     conn.close()
     return row
