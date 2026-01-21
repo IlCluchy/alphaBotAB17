@@ -87,7 +87,15 @@ def handle_command(command):
         r.stop()
     elif command == 'circle':
         mv = get_movement(command)
-
+        print(mv)
+    elif command == 'square':
+        mv = get_movement(command)
+        print(mv)
+    elif command == 'triangle':
+        mv = get_movement(command)
+        print(mv)
+    
+    
     session['last_command'] = command
     session['robot_status'] = 'moving' if command != 'stop' else 'stopped'
 
