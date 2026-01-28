@@ -5,6 +5,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from libreries.AlphaBot import AlphaBot
 from libreries.movement import circle, triangle, square
+import RPi.GPIO as GPIO
+import threading
+import time
 
 app = Flask(__name__)
 app.secret_key = 'chiave-sicura'
@@ -13,6 +16,19 @@ DB_NAME = "alphaBotDB.db"
 ITERATIONS = 200_000
 
 robot = None
+
+IR_L = 19  #sensore sinistro
+IR_R = 16  #sensore destro
+
+# settaggio dei sensori
+GPIO.setmode(GPIO.BCM) #setta i pin
+GPIO.setup(IR_L, GPIO.IN)  #setta i pin in input
+GPIO.setup(IR_R, GPIO.IN) 
+
+sensor_status = {
+    "left": "Nessun ostacolo",
+    "right": "Nessun ostacolo"
+}
 
 # -------------------
 # FLASK-LOGIN SETUP
@@ -59,8 +75,40 @@ def verify_user_data(username, password):
         return None
 
 # -------------------
+# THREAD FUNCTIONS
+# -------------------
+
+def sensor_thread():
+    r = get_robot()
+
+    while True:
+        left, right = get_sensor_value()
+
+        if(left == 0):
+            sensor_status['left'] = 'Ostacolo rilevato'
+            r.stop()
+        else:
+            sensor_status['left'] = 'Nessun ostacolo rilevato'
+
+        if(right == 0):
+            sensor_status['right'] = 'Ostacolo rilevato'
+            r.stop()
+        else:
+            sensor_status['right'] = 'Nessun ostacolo rilevato'
+
+        time.sleep(0.1)
+
+    
+
+# -------------------
 # ROBOT FUNCTIONS
 # -------------------
+
+def get_sensor_value():
+    left = GPIO.input(IR_L)
+    right = GPIO.input(IR_R)
+    return left, right
+
 def get_robot():
     global robot
     if robot is None:
@@ -70,6 +118,7 @@ def get_robot():
 
 def handle_command(command):
     r = get_robot()
+    
     if command == 'w':
         r.stop()
         r.forward()
@@ -90,7 +139,6 @@ def handle_command(command):
         r.stop()
     elif get_movement(command) == "square":
         r.stop()
-        #robot, direction, speed, forward_time, turn_delay
         square(r, "right", 30, 1,0.3)
         r.stop()
     elif get_movement(command) == "triangle":
@@ -165,8 +213,8 @@ def command():
     
     last_cmd = session.get('last_command', 'Nessun comando ancora')
     robot_status = session.get('robot_status', 'stopped')
-
-    return render_template("command.html", username=current_user.username, last_command=last_cmd, robot_status=robot_status)
+    return render_template("command.html", username=current_user.username, 
+                           last_command=last_cmd, robot_status=robot_status)
 
 @app.route("/logout")
 @login_required
@@ -179,8 +227,17 @@ def logout():
     flash("Logout effettuato con successo.", "success")
     return redirect(url_for('login'))
 
+@app.route("/sensor_status")
+@login_required
+def sensor_status_api():
+    return {
+        "left": sensor_status["left"],
+        "right": sensor_status["right"]
+    }
+
 # -------------------
 # MAIN
 # -------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    threading.Thread(target=sensor_thread, daemon=True).start()
+    app.run(host="0.0.0.0", port=5000, debug=False)

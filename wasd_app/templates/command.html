@@ -22,6 +22,17 @@
             <p><strong>Ultimo Comando:</strong> {{ last_command }}</p>
         </div>
 
+        <div class="status-sensor">
+            <p>
+                <strong>Stato sensore destro:</strong>
+                <span id="sensor_right">—</span>
+            </p>
+            <p>
+                <strong>Stato sensore sinistro:</strong>
+                <span id="sensor_left">—</span>
+            </p>
+        </div>
+
         <!-- Controllo manuale -->
         <form method="POST">
             <div class="control-grid">
@@ -46,5 +57,23 @@
             </div>
         </form>
     </div>
+
+    <script>
+    function updateSensors(){
+        fetch("/sensor_status")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("sensor_left").innerText = data.left;
+                document.getElementById("sensor_right").innerText = data.right;
+            })
+            .catch(err => console.error("Errore sensori:", err));
+    }
+
+    updateSensors();
+
+    setInterval(updateSensors, 500);
+    </script>
+
+
 </body>
 </html>
