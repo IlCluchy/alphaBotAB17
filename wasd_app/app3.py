@@ -4,6 +4,7 @@ import binascii
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from libreries.AlphaBot import AlphaBot
+from libreries.movement import circle, triangle, square
 
 app = Flask(__name__)
 app.secret_key = 'chiave-sicura'
@@ -83,9 +84,21 @@ def handle_command(command):
         r.backward()
     elif command == 'stop':
         r.stop()
-    elif command == 'circle':
-        mv = get_movement(command)
-
+    elif get_movement(command) == "circle":
+        r.stop()
+        circle(r, "right", 30, 1)
+        r.stop()
+    elif get_movement(command) == "square":
+        r.stop()
+        #robot, direction, speed, forward_time, turn_delay
+        square(r, "right", 30, 1,0.3)
+        r.stop()
+    elif get_movement(command) == "triangle":
+        r.stop()
+        triangle(r, "right", 30, 1,0.3)
+        r.stop()
+    
+    
     session['last_command'] = command
     session['robot_status'] = 'moving' if command != 'stop' else 'stopped'
 
@@ -115,10 +128,11 @@ def get_user_by_username(username):
 def get_movement(command):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    cursor.execute("SELECT function_library FROM movements WHERE descrizione = ?", (command,))
+    cursor.execute("SELECT name_function FROM movements WHERE command = ?", (command,))
     row = cursor.fetchone()
     conn.close()
-    return row
+    print(row)
+    return row[0]
 
 # -------------------
 # ROUTES
